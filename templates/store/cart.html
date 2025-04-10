@@ -1,77 +1,364 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Your Cart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart | BookVerse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
             margin: 0;
-            padding: 40px;
+            padding: 0;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: white;
+        }
+
+        .btn-outline:hover {
+            background-color: #f0f7ff;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
         }
 
         .cart-container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            max-width: 500px;
-            width: 100%;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .book-item {
-            padding: 10px 0;
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid #eee;
-            font-size: 16px;
         }
 
-        .book-item:last-child {
-            border-bottom: none;
+        .cart-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin: 0;
+        }
+
+        .item-count {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .cart-items {
+            margin-bottom: 2rem;
+        }
+
+        /* Improved cart item display */
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .cart-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-cover {
+            width: 100px;
+            height: 130px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .item-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-cover i {
+            color: #ccc;
+            font-size: 1.5rem;
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .item-author {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
         }
 
         .empty-cart {
             text-align: center;
-            color: #888;
-            font-style: italic;
+            padding: 3rem 0;
+            color: #666;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #fff;
-            background-color: #007bff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
+        .empty-cart i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 1rem;
         }
 
-        .back-link:hover {
-            background-color: #0056b3;
+        .empty-cart p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cart-summary {
+            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .continue-btn {
+            background-color: #f8f9fa;
+            color: var(--dark);
+        }
+
+        .checkout-btn {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .cart-item {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 1rem;
+            }
+
+            .item-actions {
+                align-items: flex-start;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="cart-container">
-        <h2>Your Cart</h2>
-        {% for book in cart_books %}
-            <div class="book-item">
-                {{ book.title }} - ${{ book.price }}
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'book_list' %}" class="logo">
+                <i class="fas fa-book-open"></i>
+                BookVerse
+            </a>
+            <div>
+                <a href="{% url 'book_list' %}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i>
+                    Continue Shopping
+                </a>
             </div>
-        {% empty %}
-            <p class="empty-cart">Your cart is empty.</p>
-        {% endfor %}
+        </div>
 
-        <div style="text-align: center;">
-            <a href="{% url 'book_list' %}" class="back-link">← Back to Book Page</a>
+        <div class="cart-container">
+            <div class="cart-header">
+                <h1 class="cart-title">Your Shopping Cart</h1>
+                <span class="item-count">
+                    {% if cart_items %}
+                        {{ cart_items|length }} item{{ cart_items|length|pluralize }}
+                    {% else %}
+                        Empty
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="cart-items">
+                {% if cart_items %}
+                    {% for item in cart_items %}
+                    <div class="cart-item">
+                        <div class="item-cover">
+                            {% if item.book.cover_image %}
+                                <img src="{{ item.book.cover_image.url }}" alt="{{ item.book.title }}">
+                            {% else %}
+                                <i class="fas fa-book"></i>
+                            {% endif %}
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-title">{{ item.book.title }}</h3>
+                            <p class="item-author">by {{ item.book.author }}</p>
+                            <p class="item-price">${{ item.book.price }}</p>
+                            <p class="item-quantity">Quantity: {{ item.quantity }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Your cart is empty</p>
+                        <a class="btn btn-primary">
+                            <i class="fas fa-book"></i> Browse Books
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if cart_items %}
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>${{ subtotal }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span>${{ subtotal }}</span>
+                </div>
+            </div>
+
+            <div class="cart-actions">
+                <a href="{% url 'book_list' %}" class="btn continue-btn">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </body>

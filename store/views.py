@@ -41,15 +41,49 @@ def book_detail(request, book_id):
     return render(request, 'store/book_detail.html', {'book': book})
 
 @login_required
-def add_to_cart(request, book_id):
-    cart = request.session.get('cart', [])
-    if book_id not in cart:
-        cart.append(book_id)
-    request.session['cart'] = cart
-    return redirect('view_cart')
+def view_cart(request):
+    # Initialize cart as dictionary if it doesn't exist
+    if 'cart' not in request.session or not isinstance(request.session['cart'], dict):
+        request.session['cart'] = {}
+    
+    cart = request.session['cart']
+    
+    # Convert string keys to integers for query
+    book_ids = [int(id) for id in cart.keys() if id.isdigit()]
+    books = Book.objects.filter(id__in=book_ids)
+    
+    cart_items = []
+    subtotal = 0
+    
+    for book in books:
+        # Use string key to access quantity
+        quantity = cart.get(str(book.id), 0)
+        if quantity > 0:
+            item_total = book.price * quantity
+            subtotal += item_total
+            cart_items.append({
+                'book': book,
+                'quantity': quantity,
+                'item_total': item_total
+            })
+    
+    return render(request, 'store/cart.html', {
+        'cart_items': cart_items,
+        'subtotal': subtotal
+    })
 
 @login_required
-def view_cart(request):
-    cart = request.session.get('cart', [])
-    books = Book.objects.filter(id__in=cart)
-    return render(request, 'store/cart.html', {'cart_books': books})
+def add_to_cart(request, book_id):
+    # Initialize cart as dictionary if needed
+    if 'cart' not in request.session or not isinstance(request.session['cart'], dict):
+        request.session['cart'] = {}
+    
+    cart = request.session['cart']
+    book_id_str = str(book_id)
+    
+    # Update quantity
+    cart[book_id_str] = cart.get(book_id_str, 0) + 1
+    
+    # Mark session as modified
+    request.session.modified = True
+    return redirect('view_cart')
