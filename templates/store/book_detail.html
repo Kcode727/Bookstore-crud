@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ book.title }} - Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .details {
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            margin: 10px 8px 0 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ book.title }}</h2>
+
+        <div class="details">
+            <p>{{ book.description }}</p>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+        </div>
+
+        <a href="{% url 'add_to_cart' book.id %}" class="btn">Add to Cart</a>
+        <a href="{% url 'book_list' %}" class="btn">Back to Book List</a>
+    </div>
+</body>
+</html>

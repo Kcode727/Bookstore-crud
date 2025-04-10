@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .book-list a {
+            display: block;
+            padding: 10px 0;
+            color: #007bff;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+            transition: 0.3s;
+        }
+
+        .book-list a:hover {
+            background-color: #f2f9ff;
+            padding-left: 10px;
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            margin: 0 10px;
+            color: #fff;
+            background-color: #007bff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Books</h2>
+        <div class="book-list">
+            {% for book in books %}
+                <a href="{% url 'book_detail' book.id %}">{{ book.title }}</a>
+            {% empty %}
+                <p>No books available.</p>
+            {% endfor %}
+        </div>
+
+        <div class="footer-links">
+            <a href="{% url 'view_cart' %}">🛒 View Cart</a>
+            <a href="{% url 'logout' %}">🚪 Logout</a>
+        </div>
+    </div>
+</body>
+</html>
