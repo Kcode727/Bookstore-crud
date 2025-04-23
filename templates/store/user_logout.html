@@ -1,0 +1,7 @@
+from django.contrib.auth import logout
+from django.views import View
+
+class user_logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')  # Redirect to login after logout
