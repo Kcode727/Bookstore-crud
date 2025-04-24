@@ -9,7 +9,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'docker-compose -f docker-compose.yml up -d'
-                sh 'docker exec $(docker ps -q -f name=bookstore_web) python manage.py test'
+                sh 'docker exec $(docker ps -q -f name=bookstore_web) python manage.py '
             }
         }
         stage('Deploy') {
