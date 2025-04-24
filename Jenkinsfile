@@ -3,18 +3,25 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker-compose build'
+                sh 'docker build -t bookstore-app .'
             }
         }
         stage('Test') {
             steps {
-                sh 'docker-compose run web python manage.py test'
+                sh 'docker-compose -f docker-compose.yml up -d'
+                sh 'docker exec $(docker ps -q -f name=bookstore_web) python manage.py test'
             }
         }
         stage('Deploy') {
             steps {
+                sh 'docker-compose down'
                 sh 'docker-compose up -d'
             }
+        }
+    }
+    post {
+        always {
+            sh 'docker-compose down'
         }
     }
 }
